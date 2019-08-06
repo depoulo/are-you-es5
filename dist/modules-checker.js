@@ -41,13 +41,12 @@ class ModulesChecker {
         return nonEs5Dependencies;
     }
     getDeps() {
-        if (!this.config.checkAllNodeModules) {
-            return this.getDepsFromRootPackageJson();
+        const deps = this.getDepsFromRootPackageJson();
+        if (this.config.checkAllNodeModules) {
+            deps.push(...this.getAllNodeModules());
         }
-        else {
-            return this.getAllNodeModules();
-        }
-        return null;
+        // convert to and from a Set to remove duplicates
+        return [...new Set(deps)].sort();
     }
     isScriptEs5(scriptPath, dependencyName) {
         // TODO: Check all scripts this script requires/imports
